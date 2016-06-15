@@ -1,0 +1,31 @@
+{
+    "name": "battlecruiser",
+    "description": "JavaScript framework for building complex node applications",
+    "version": "0.0.0",
+    "author": "Aleksandr Zaytsev <13rentgen@gmail.com>",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": "13rentgen/battlecruiser",
+    "keywords": [
+        "battlecruiser",
+        "component",
+        "controller",
+        "server",
+        "source",
+        "complex",
+        "app",
+        "application"
+    ],
+    "engines": {
+        "node": ">= 6.2.0"
+    },
+    "files": [
+        "LICENSE",
+        "README.md",
+        "index.js",
+        "lib/"
+    ],
+    "license": "MIT"
+}
