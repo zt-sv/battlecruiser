@@ -1,31 +1,42 @@
 {
-    "name": "battlecruiser",
-    "description": "JavaScript framework for building complex node applications",
-    "version": "0.0.0",
-    "author": "Aleksandr Zaytsev <13rentgen@gmail.com>",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": "13rentgen/battlecruiser",
-    "keywords": [
-        "battlecruiser",
-        "component",
-        "controller",
-        "server",
-        "source",
-        "complex",
-        "app",
-        "application"
-    ],
-    "engines": {
-        "node": ">= 6.2.0"
-    },
-    "files": [
-        "LICENSE",
-        "README.md",
-        "index.js",
-        "lib/"
-    ],
-    "license": "MIT"
+  "name": "battlecruiser",
+  "description": "JavaScript framework for building complex node applications",
+  "version": "0.0.0",
+  "author": "Aleksandr Zaytsev <13rentgen@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "test": "make lint && make test",
+    "test-ci": "make test-ci"
+  },
+  "repository": "13rentgen/battlecruiser",
+  "keywords": [
+    "battlecruiser",
+    "component",
+    "controller",
+    "server",
+    "source",
+    "complex",
+    "app",
+    "application"
+  ],
+  "engines": {
+    "node": ">= 6.2.0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "lib/"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.0.0-rc.6",
+    "handlebars": "^4.0.5"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^2.13.0",
+    "istanbul": "^0.4.3",
+    "mocha": "^2.5.3"
+  }
 }
