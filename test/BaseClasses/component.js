@@ -1,13 +1,13 @@
 'use strict';
 
 var
-    chai      = require('chai'),
-    BaseClass = require('../../lib/BaseClasses/BaseClass'),
-    Component = require('../../lib/BaseClasses/Component'),
-    expect    = chai.expect,
-    should    = chai.should(),
+    chai       = require('chai'),
+    BaseClass  = require('../../lib/BaseClasses/BaseClass'),
+    Component  = require('../../lib/BaseClasses/Component'),
+    expect     = chai.expect,
+    should     = chai.should(),
 
-    methods   = [
+    methods    = [
         'disableCachingTemplates',
         'enableCachingTemplates',
         'declareDependencies',
@@ -47,7 +47,7 @@ describe('Testing "Component"...', function() {
             var
                 component = new Component();
 
-            methods.forEach(function( method ) {
+            methods.forEach(function(method) {
                 expect(component).to.have.property(method);
                 expect(component[method]).to.be.a('function');
             });
@@ -57,9 +57,9 @@ describe('Testing "Component"...', function() {
         - ` + prop)}
         `, function() {
             var
-                component  = new Component();
+                component = new Component();
 
-            properties.forEach(function( prop ) {
+            properties.forEach(function(prop) {
                 expect(component).to.have.property(prop);
             });
         });
@@ -92,12 +92,10 @@ describe('Testing "Component"...', function() {
                     123, // number
                     [] // array
                 ],
-                takeValue = function( value ) {
-                    component.templatePath = value;
-                };
+                testValue = value => component.templatePath = value;
 
-            values.forEach(function( value ) {
-                expect(takeValue.bind(null, value)).to.throw('Property "templatePath" takes only string value');
+            values.forEach(function(value) {
+                expect(testValue.bind(null, value)).to.throw('Property "templatePath" takes only string value');
             });
         });
     });
