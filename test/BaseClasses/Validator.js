@@ -1,283 +1,188 @@
 'use strict';
 
 var
-    chai        = require('chai'),
-    Validator   = require('../../lib/BaseClasses/Validator'),
-    expect      = chai.expect,
-    should      = chai.should(),
+    chai          = require('chai'),
+    Validator     = require('../../lib/BaseClasses/Validator'),
+    expect        = chai.expect,
+    should        = chai.should(),
 
-    methods     = [
+    methods       = [
         'validate'
     ],
 
-    staticMethods = [
-        'isRequired',
-        'isString',
-        'isNumber',
-        'isBoolean',
-        'isArray',
-        'isArrayOf',
-        'isObject',
-        'isEqual',
-        'isDeepEqual'
-    ];
+    undef         = [null, undefined],
+    numbers       = [1, 1.23, 0, NaN, new Number(), new Number(0), new Number(10)],
+    strings       = ['', '1', new String(), new String(''), new String('asd')],
+    bool          = [true, false, new Boolean(), new Boolean(true)],
+    objects       = [{}, {foo: 'foo'}, new Object(), new Object({})],
+    arrays        = [[], [0], ['asd'], new Array(), new Array(10)],
+    dates         = [new Date()],
+    fns           = [function() {}, class SomeClass {}],
+
+    staticMethods = {
+        'isRequired': {
+            validValues:   [].concat(numbers, strings, bool, objects, arrays, dates, fns),
+            invalidValues: [].concat(undef),
+            errMessage:    'Property "testKey" is required'
+        },
+        'isString':   {
+            validValues:   [].concat(undef, strings),
+            invalidValues: [].concat(numbers, bool, objects, arrays, dates, fns),
+            errMessage:    'Property "testKey" must be string'
+        },
+        'isNumber':   {
+            validValues:   [].concat(undef, numbers),
+            invalidValues: [].concat(strings, bool, objects, arrays, dates, fns),
+            errMessage:    'Property "testKey" must be number'
+        },
+        'isBoolean':  {
+            validValues:   [].concat(undef, bool),
+            invalidValues: [].concat(numbers, strings, objects, arrays, dates, fns),
+            errMessage:    'Property "testKey" must be boolean'
+        },
+        'isArray':    {
+            validValues:   [].concat(undef, arrays),
+            invalidValues: [].concat(numbers, strings, bool, objects, dates, fns),
+            errMessage:    'Property "testKey" must be array'
+        },
+        'isObject':   {
+            validValues:   [].concat(undef, objects),
+            invalidValues: [].concat(numbers, strings, bool, arrays, dates, fns),
+            errMessage:    'Property "testKey" must be object'
+        },
+        'isDate':     {
+            validValues:   [].concat(undef, dates),
+            invalidValues: [].concat(numbers, strings, bool, arrays, objects, fns),
+            errMessage:    'Property "testKey" must be date'
+        },
+        'isFunction': {
+            validValues:   [].concat(undef, fns),
+            invalidValues: [].concat(numbers, strings, bool, arrays, objects, dates),
+            errMessage:    'Property "testKey" must be function'
+        },
+        'isArrayOf':  {
+            validValues:   [],
+            invalidValues: []
+        },
+        'isEqual':     {
+            validValues:   [],
+            invalidValues: []
+        },
+        'isDeepEqual': {
+            validValues:   [],
+            invalidValues: []
+        }
+    };
 
 describe('Testing "Validator"...', function() {
     describe('public methods', function() {
         it(`should to have static properties: ${methods.map(method => `
         - ` + method)}
         `, function() {
-            var
-                validator = new Validator();
-
             methods.forEach(method => {
-                expect(validator).to.have.property(method);
-                expect(validator[method]).to.be.a('function');
+                expect(Validator).to.respondTo(method);
             });
         });
     });
 
     describe('public static methods', function() {
-        it(`should to have static methods: ${staticMethods.map(prop => `
-        - ` + prop)}
+        it(`should to have static methods: ${Object.keys(staticMethods).map(method => `
+        - ` + method)}
         `, function() {
-            staticMethods.forEach(prop => {
-                expect(Validator).to.have.property(prop);
-                expect(Validator[prop]).to.be.a('function');
+            for ( let method in staticMethods ) {
+                expect(Validator).itself.to.respondTo(method);
+            }
+        });
+    });
+
+    for ( let method in staticMethods ) {
+        if ( !staticMethods.hasOwnProperty(method) ) {
+            continue;
+        }
+
+        let
+            validValues   = staticMethods[method].validValues,
+            invalidValues = staticMethods[method].invalidValues;
+
+        if (!validValues.length && !invalidValues.length) {
+            continue;
+        }
+
+        describe(`static method "${method}"`, function() {
+            var
+                errMessage    = staticMethods[method].errMessage;
+
+            it(`${method} should work with values`, function() {
+                validValues.forEach(value => {
+                    expect(() => Validator[method]('testKey', value)).to.not.throw();
+                });
+            });
+
+            it(`${method} should throw error with values`, function() {
+                invalidValues.forEach(value => {
+                    expect(() => Validator[method]('testKey', value)).to.throw(Error, errMessage);
+                });
+            });
+
+        });
+    }
+
+    describe(`static method "isArrayOf"`, function() {
+        it(`isArrayOf should work with functions only`, function() {
+            var
+                validValues = [].concat(fns);
+
+            validValues.forEach(value => {
+                expect(() => Validator.isArrayOf(value)).to.not.throw();
+            });
+        });
+
+        it(`isArrayOf should throw error with any values except functions`, function() {
+            var
+                invalidValues = [].concat(undef, numbers, strings, bool, objects, arrays, dates);
+
+            invalidValues.forEach(value => {
+                expect(() => Validator.isArrayOf(value)).to.throw(Error, 'Type checker for array elements must be function');
             });
         });
     });
 
-    describe('static method "isRequired"', function() {
-        it('should not throw error for all normal values except null and undefined', function() {
+    describe(`static method "isEqual"`, function() {
+        it(`isEqual should work with any values except null and undefined`, function() {
             var
-                values = [
-                    '',
-                    '1',
-                    1,
-                    1.23,
-                    true,
-                    false,
-                    0,
-                    NaN,
-                    {},
-                    {
-                        foo: 'foo'
-                    },
-                    [],
-                    [0],
-                    ['asd'],
-                    new String(),
-                    new Number(),
-                    new Array(),
-                    new Object(),
-                    new Boolean(),
-                    new Date()
-                ],
-                testValue = value => Validator.isRequired('testKey', value);
+                validValues = [].concat(numbers, strings, bool, objects, arrays, dates, fns);
 
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.be.ok;
+            validValues.forEach(value => {
+                expect(() => Validator.isEqual(value)).to.not.throw();
             });
         });
 
-        it('should throw error for null and undefined', function() {
+        it(`isEqual should throw error with null and undefined`, function() {
             var
-                values = [
-                    null,
-                    undefined
-                ],
-                testValue = value => Validator.isRequired('testKey', value);
+                invalidValues = [].concat(undef);
 
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.throw('Property "testKey" is required');
+            invalidValues.forEach(value => {
+                expect(() => Validator.isEqual(value)).to.throw(Error, 'You should pass an any value');
             });
         });
     });
 
-    describe('static method "isString"', function() {
-        it('should not throw error for strings, null and undefined', function() {
+    describe(`static method "isDeepEqual"`, function() {
+        it(`isDeepEqual should work with any values except null and undefined`, function() {
             var
-                values = [
-                    null,
-                    undefined,
-                    '',
-                    '1',
-                    new String()
-                ],
-                testValue = value => Validator.isString('testKey', value);
+                validValues = [].concat(numbers, strings, bool, objects, arrays, dates, fns);
 
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.be.ok;
+            validValues.forEach(value => {
+                expect(() => Validator.isDeepEqual(value)).to.not.throw();
             });
         });
 
-        it('should throw error for all values except strings', function() {
+        it(`isDeepEqual should throw error with null and undefined`, function() {
             var
-                values = [
-                    1,
-                    1.23,
-                    true,
-                    false,
-                    0,
-                    NaN,
-                    {},
-                    {
-                        foo: 'foo'
-                    },
-                    [],
-                    [0],
-                    ['asd'],
-                    new Number(),
-                    new Array(),
-                    new Object(),
-                    new Boolean(),
-                    new Date()
-                ],
-                testValue = value => Validator.isString('testKey', value);
+                invalidValues = [].concat(undef);
 
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.throw('Property "testKey" must be string');
-            });
-        });
-    });
-
-    describe('static method "isNumber"', function() {
-        it('should not throw error for numbers, null and undefined', function() {
-            var
-                values = [
-                    null,
-                    undefined,
-                    0,
-                    1,
-                    1.34,
-                    new Number()
-                ],
-                testValue = value => Validator.isNumber('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.be.ok;
-            });
-        });
-
-        it('should throw error for all values except numbers', function() {
-            var
-                values = [
-                    '',
-                    '1',
-                    true,
-                    false,
-                    NaN,
-                    {},
-                    {
-                        foo: 'foo'
-                    },
-                    [],
-                    [0],
-                    ['asd'],
-                    new Array(),
-                    new Object(),
-                    new Boolean(),
-                    new String(),
-                    new Date()
-                ],
-                testValue = value => Validator.isNumber('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.throw('Property "testKey" must be number');
-            });
-        });
-    });
-
-    describe('static method "isBoolean"', function() {
-        it('should not throw error for booleans, null and undefined', function() {
-            var
-                values = [
-                    null,
-                    undefined,
-                    true,
-                    false,
-                    new Boolean()
-                ],
-                testValue = value => Validator.isBoolean('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.be.ok;
-            });
-        });
-
-        it('should throw error for all values except booleans', function() {
-            var
-                values = [
-                    '',
-                    '1',
-                    1,
-                    0,
-                    NaN,
-                    {},
-                    {
-                        foo: 'foo'
-                    },
-                    [],
-                    [0],
-                    ['asd'],
-                    new Array(),
-                    new Object(),
-                    new Number(),
-                    new String(),
-                    new Date()
-                ],
-                testValue = value => Validator.isBoolean('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.throw('Property "testKey" must be boolean');
-            });
-        });
-    });
-
-    describe('static method "isArray"', function() {
-        it('should not throw error for array, null and undefined', function() {
-            var
-                values = [
-                    null,
-                    undefined,
-                    [],
-                    [0],
-                    ['asd'],
-                    new Array(),
-                    new Array(10)
-                ],
-                testValue = value => Validator.isArray('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.be.ok;
-            });
-        });
-
-        it('should throw error for all values except array', function() {
-            var
-                values = [
-                    '',
-                    '1',
-                    1,
-                    0,
-                    NaN,
-                    {},
-                    {
-                        foo: 'foo'
-                    },
-                    true,
-                    false,
-                    new Boolean(),
-                    new Object(),
-                    new Number(),
-                    new String(),
-                    new Date()
-                ],
-                testValue = value => Validator.isArray('testKey', value);
-
-            values.forEach(value => {
-                expect(testValue.bind(null, value)).to.throw('Property "testKey" must be array');
+            invalidValues.forEach(value => {
+                expect(() => Validator.isDeepEqual(value)).to.throw(Error, 'You should pass an any value');
             });
         });
     });

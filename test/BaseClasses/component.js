@@ -44,12 +44,8 @@ describe('Testing "Component"...', function() {
         it(`should to have public methods: ${methods.map(method => `
         - ` + method)}
         `, function() {
-            var
-                component = new Component();
-
             methods.forEach(function(method) {
-                expect(component).to.have.property(method);
-                expect(component[method]).to.be.a('function');
+                expect(Component).to.respondTo(method);
             });
         });
 

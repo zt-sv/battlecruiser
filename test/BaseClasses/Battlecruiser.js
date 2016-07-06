@@ -36,11 +36,10 @@ describe('Testing "Battlecruiser"...', function() {
         - ` + prop)}
         `, function() {
             for (let prop in staticProps) {
-                expect(Battlecruiser).to.have.property(prop);
-                expect(Battlecruiser[prop]).to.be.a('function');
+                expect(Battlecruiser).itself.to.respondTo(prop);
 
-                expect(new Battlecruiser[prop]).to.be.instanceof(BaseClass);
-                expect(new Battlecruiser[prop]).to.be.instanceof(staticProps[prop]);
+                expect(new Battlecruiser[prop]()).to.be.instanceof(BaseClass);
+                expect(new Battlecruiser[prop]()).to.be.instanceof(staticProps[prop]);
             }
         });
     });
