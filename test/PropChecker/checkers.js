@@ -1,7 +1,7 @@
 'use strict';
 
 var
-    checkers      = require('../../lib/PropChecker/checkers'),
+    PropChecker   = require('../../lib/PropChecker'),
     propName      = 'testingProp',
     staticMethods = {
         'isRequired':  {
@@ -59,14 +59,14 @@ var
         }
     };
 
-describe('Testing "lib/PropChecker/checkers"...', function() {
-    describe('public methods', function() {
-        it(`should to have public methods: ${Object.keys(staticMethods).map(method => `
+describe('Testing checkers in "lib/PropChecker"...', function() {
+    describe('checkers', function() {
+        it(`should to have public checkers: ${Object.keys(staticMethods).map(method => `
         - ` + method)}
         `, function() {
             for (let method in staticMethods) {
                 if (staticMethods.hasOwnProperty(method)) {
-                    expect(checkers).to.have.ownProperty(method);
+                    expect(PropChecker).to.have.ownProperty(method);
                 }
             }
         });
@@ -86,16 +86,16 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
             continue;
         }
 
-        describe(`static method "${method}"`, function() {
+        describe(`checker "${method}"`, function() {
             it(`${method} should work with values`, function() {
                 validValues.forEach(value => {
-                    expect(() => checkers[method].check(propName, value)).to.not.throw();
+                    expect(() => PropChecker[method].check(propName, value)).to.not.throw();
                 });
             });
 
             it(`${method} should throw error with values`, function() {
                 invalidValues.forEach(value => {
-                    expect(() => checkers[method].check(propName, value))
+                    expect(() => PropChecker[method].check(propName, value))
                         .to.throw(Error, errMessage);
                 });
             });
@@ -103,8 +103,8 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
         });
     }
 
-    describe('static method "isArrayOf"', function() {
-        it('isArrayOf should work with validator type checkers only', function() {
+    describe('checker "isArrayOf"', function() {
+        it('isArrayOf should work with instance of PropChecker only', function() {
             var
                 except      = ['isArrayOf', 'isEqual', 'isDeepEqual'],
                 validValues = [];
@@ -114,11 +114,11 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
                     continue;
                 }
 
-                validValues.push(checkers[method]);
+                validValues.push(PropChecker[method]);
             }
 
             validValues.forEach(value => {
-                expect(() => checkers.isArrayOf(value)).to.not.throw();
+                expect(() => PropChecker.isArrayOf(value)).to.not.throw();
             });
         });
 
@@ -127,15 +127,15 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
                 invalid = [].concat(nullAndUndef, strings, numbers, bool, objects, arrays, dates, errors, regexps, fns);
 
             invalid.forEach(value => {
-                expect(() => checkers.isArrayOf(value))
-                    .to.throw(Error, 'Type checker for array elements must be type checker function');
+                expect(() => PropChecker.isArrayOf(value))
+                    .to.throw(Error, 'Type checker for array elements must be instance of PropChecker');
             });
         });
 
         it('isArrayOf should throw error if try validate not array except null and undefined', function() {
             var
                 invalid         = [].concat(numbers, strings, bool, objects, dates, fns),
-                isArrayOfNumber = checkers.isArrayOf(checkers.isNumber);
+                isArrayOfNumber = PropChecker.isArrayOf(PropChecker.isNumber);
 
             invalid.forEach(value => {
                 expect(() => isArrayOfNumber.check(propName, value))
@@ -145,10 +145,10 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
 
         it('isArrayOf should no throw error if array elements have compatible type', function() {
             var
-                isArrayOfNumber = checkers.isArrayOf(checkers.isNumber),
-                isArrayOfArray  = checkers.isArrayOf(checkers.isArray),
-                isArrayOfObject = checkers.isArrayOf(checkers.isObject),
-                isArrayOfString = checkers.isArrayOf(checkers.isString);
+                isArrayOfNumber = PropChecker.isArrayOf(PropChecker.isNumber),
+                isArrayOfArray  = PropChecker.isArrayOf(PropChecker.isArray),
+                isArrayOfObject = PropChecker.isArrayOf(PropChecker.isObject),
+                isArrayOfString = PropChecker.isArrayOf(PropChecker.isString);
 
             numbers.forEach(value => {
                 expect(() => isArrayOfNumber.check(propName, [value])).to.not.throw();
@@ -170,7 +170,7 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
         it('isArrayOf should throw error if array elements have not compatible type', function() {
             var
                 invalidValues   = [].concat(nullAndUndef, strings, bool, objects, arrays, dates, fns),
-                isArrayOfNumber = checkers.isArrayOf(checkers.isNumber);
+                isArrayOfNumber = PropChecker.isArrayOf(PropChecker.isNumber);
 
             invalidValues.forEach(value => {
                 expect(() => isArrayOfNumber.check(propName, [value]))
@@ -179,13 +179,13 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
         });
     });
 
-    describe('static method "isEqual"', function() {
+    describe('checker "isEqual"', function() {
         it('isEqual should work with any values except null and undefined', function() {
             var
                 validValues = [].concat(numbers, strings, bool, objects, arrays, dates, fns);
 
             validValues.forEach(value => {
-                expect(() => checkers.isEqual(value)).to.not.throw();
+                expect(() => PropChecker.isEqual(value)).to.not.throw();
             });
         });
 
@@ -194,18 +194,18 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
                 invalidValues = [].concat(nullAndUndef);
 
             invalidValues.forEach(value => {
-                expect(() => checkers.isEqual(value)).to.throw(Error, 'You should pass an any value');
+                expect(() => PropChecker.isEqual(value)).to.throw(Error, 'You should pass an any value');
             });
         });
     });
 
-    describe('static method "isDeepEqual"', function() {
+    describe('checker "isDeepEqual"', function() {
         it('isDeepEqual should work with any values except null and undefined', function() {
             var
                 validValues = [].concat(numbers, strings, bool, objects, arrays, dates, fns);
 
             validValues.forEach(value => {
-                expect(() => checkers.isDeepEqual(value)).to.not.throw();
+                expect(() => PropChecker.isDeepEqual(value)).to.not.throw();
             });
         });
 
@@ -214,7 +214,7 @@ describe('Testing "lib/PropChecker/checkers"...', function() {
                 invalidValues = [].concat(nullAndUndef);
 
             invalidValues.forEach(value => {
-                expect(() => checkers.isDeepEqual(value)).to.throw(Error, 'You should pass an any value');
+                expect(() => PropChecker.isDeepEqual(value)).to.throw(Error, 'You should pass an any value');
             });
         });
     });
