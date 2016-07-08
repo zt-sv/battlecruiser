@@ -1,20 +1,14 @@
 'use strict';
 
 var
-    chai    = require('chai'),
-    spies   = require('chai-spies'),
     logger  = require('../../lib/logger'),
     config  = require('../../lib/config'),
-    expect  = chai.expect,
-    should  = chai.should(),
 
     methods = [
         'log',
         'info',
         'error'
     ];
-
-chai.use(spies);
 
 describe('Testing "logger"...', function() {
     describe('public properties and methods', function() {

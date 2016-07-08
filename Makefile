@@ -1,7 +1,7 @@
 NPM_BIN=./node_modules/.bin
 HOOKS=./.git/hooks/
-LINT_SPEC= *.js ./lib
-TEST_SPEC=-S --ui bdd --timeout 5000 --recursive test/ --colors --reporter spec
+LINT_SPEC= *.js ./lib ./test
+TEST_SPEC=-S --ui bdd --timeout 5000 --require test/testHelpers --recursive test/ --colors --reporter spec
 
 .PHONY: lint
 lint:

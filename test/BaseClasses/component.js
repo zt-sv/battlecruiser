@@ -1,11 +1,8 @@
 'use strict';
 
 var
-    chai       = require('chai'),
     BaseClass  = require('../../lib/BaseClasses/BaseClass'),
     Component  = require('../../lib/BaseClasses/Component'),
-    expect     = chai.expect,
-    should     = chai.should(),
 
     methods    = [
         'disableCachingTemplates',
@@ -29,7 +26,7 @@ var
         'data'
     ];
 
-describe('Testing "Component"...', function() {
+describe('Testing "lib/BaseClasses/Component"...', function() {
     describe('inheritance', function() {
         it('should to extend BaseClass', function() {
             var
@@ -84,9 +81,9 @@ describe('Testing "Component"...', function() {
                 component = new Component(),
                 values    = [
                     true,
-                    {}, // object
-                    123, // number
-                    [] // array
+                    {},
+                    123,
+                    []
                 ],
                 testValue = value => component.templatePath = value;
 

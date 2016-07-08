@@ -1,7 +1,6 @@
 'use strict';
 
 var
-    chai             = require('chai'),
     BaseClass        = require('../../lib/BaseClasses/BaseClass'),
     Battlecruiser    = require('../../lib/BaseClasses/Battlecruiser'),
     Component        = require('../../lib/BaseClasses/Component'),
@@ -9,8 +8,6 @@ var
     Source           = require('../../lib/BaseClasses/Source'),
     SourceRepository = require('../../lib/BaseClasses/SourceRepository'),
     SourceResponse   = require('../../lib/BaseClasses/SourceResponse'),
-    expect           = chai.expect,
-    should           = chai.should(),
 
     staticProps = {
         'Component':        Component,
@@ -20,7 +17,7 @@ var
         'SourceResponse':   SourceResponse
     };
 
-describe('Testing "Battlecruiser"...', function() {
+describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
     describe('inheritance', function() {
         it('should to extend BaseClass', function() {
             var
