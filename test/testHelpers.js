@@ -19,4 +19,4 @@ global.arrays        = [[], [0], ['asd'], new Array(), new Array(10)];
 global.dates         = [new Date()];
 global.errors        = [new Error()];
 global.regexps       = [new RegExp(), /^someRe*/gi];
-global.fns           = [function() {}, class SomeClass {}];
+global.fns           = [function() {}, () => {}, class SomeClass {}];
