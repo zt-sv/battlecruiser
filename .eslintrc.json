@@ -52,6 +52,7 @@
         "no-spaced-func": "error",
         "no-trailing-spaces": "error",
         "no-unneeded-ternary": "error",
+//        "no-unused-vars": ["error", { "vars": "all", "args": "after-used" }],
         "no-whitespace-before-property": "error",
         "object-curly-newline": ["error", {"minProperties": 1}],
         "object-property-newline": "error",

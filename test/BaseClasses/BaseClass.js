@@ -2,9 +2,7 @@
 
 var
     PropChecker = require('../../lib/PropChecker'),
-    BaseClass   = require('../../lib/BaseClasses/BaseClass'),
-
-    staticProps = [];
+    BaseClass   = require('../../lib/BaseClasses/BaseClass');
 
 describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
     describe('validate options', function() {

@@ -8,16 +8,6 @@ var
     ];
 
 describe('Testing "lib/PropChecker"...', function() {
-    describe('public methods', function() {
-        it(`should to have public methods: ${methods.map(method => `
-        - ` + method)}
-        `, function() {
-            methods.forEach(function(method) {
-                expect(PropChecker).to.respondTo(method);
-            });
-        });
-    });
-
     describe('create new PropChecker', function() {
         it('should throw error, when construct without function', function() {
             var

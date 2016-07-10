@@ -197,6 +197,24 @@ describe('Testing checkers in "lib/PropChecker"...', function() {
                 expect(() => PropChecker.isEqual(value)).to.throw(Error, 'You should pass an any value');
             });
         });
+
+        it('isEqual should no throw error when values is equal', function() {
+            var
+                valid = [].concat(strings, bool, objects, arrays, dates, fns);
+
+            valid.forEach(value => {
+                expect(() => PropChecker.isEqual(value).check('test value', value)).to.not.throw();
+            });
+        });
+
+        it('isEqual should throw error when values is not equal', function() {
+            var
+                valid = [].concat(numbers, strings, bool, objects, arrays, dates, fns);
+
+            valid.forEach(value => {
+                expect(() => PropChecker.isEqual(value).check('test value', 100500)).to.throw(Error);
+            });
+        });
     });
 
     describe('checker "isDeepEqual"', function() {
