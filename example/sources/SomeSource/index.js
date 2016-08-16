@@ -12,10 +12,9 @@ module.exports = class SomeSource extends Source {
      * @extends     Source
      *
      * @param   {Object}    options    Конфигурация источника. Содержит имя репозитория и дополнительные параметры
-     * @param   {Object}    cache           Хранилище кеша
      */
-    constructor(options, cache) {
-        super(options, cache);
+    constructor(options) {
+        super(options);
     }
 
     /**
@@ -25,21 +24,28 @@ module.exports = class SomeSource extends Source {
      * @async
      */
     execute(callback) {
-        this.async.auto({
-            // example
-            // geo:                this.getGeoRequest.bind(this),
-            // category:           ['geo', this.getCategoryRequest.bind(this)],
-            // categoryTree:       ['geo', this.categoryTreeRequest.bind(this)],
-            // categoryStaticPage: ['geo', 'category', this.categoryStaticPageRequest.bind(this)]
-        }, ( err, data ) => {
-            let
-                model, error;
+        /**
+         * @example
+            async.auto({
+                geo:                this.getGeoRequest.bind(this),
+                category:           ['geo', this.getCategoryRequest.bind(this)],
+                categoryTree:       ['geo', this.categoryTreeRequest.bind(this)],
+                categoryStaticPage: ['geo', 'category', this.categoryStaticPageRequest.bind(this)]
+            }, ( err, data ) => {
+                let
+                    model, error;
 
-            if ( err ) {
-                return callback(err, data);
-            }
+                if ( err ) {
+                    return callback(err, data);
+                }
 
-            callback(error, model);
+                callback(error, model);
+            });
+         *
+         */
+
+        callback(null, {
+            text: 'some text'
         });
     }
 };

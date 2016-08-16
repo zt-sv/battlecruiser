@@ -9,10 +9,17 @@ class MainPageRouteCtrl extends Controller {
     constructor(req, res, next) {
         super(req, res, next);
 
-        this.componentResolver.resolve({
-            component: TestComponent1,
-            options: {}
-        });
+        BC.render(
+            {
+                component: TestComponent1,
+                options: {}
+            },
+            (err, html) => {
+
+            }
+        );
+
+        this.componentResolver.resolve();
     }
 }
 

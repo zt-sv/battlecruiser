@@ -8,4 +8,4 @@
  */
 'use strict';
 
-module.exports = require('./lib/BaseClasses/Battlecruiser');
+module.exports = require('./lib/Battlecruiser');

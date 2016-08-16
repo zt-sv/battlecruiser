@@ -1,31 +1,11 @@
 var
-    BC          = require('../../../index'),
-    Component   = BC.Component,
+    BC                        = require('../../../index'),
+    Component                 = BC.Component,
 
-    css         = require('./css.js'),
+    ComponentText             = require('../ComponentText'),
+    GetTextForSomethingSource = require('../../sources/SomeSource'),
 
-    SomeDepComp = require('SomeDepComp'),
-    SomeSource2 = require('SomeSource2'),
-    SomeSource  = require('SomeSource');
-
-TestComponent1.optionsValidation = {
-    'tic': 'tak'
-};
-
-TestComponent1.events = {
-    [`click .${css.someAmazingClass}`]: 'handler'
-};
-
-TestComponent1.template = `
-    <div class="${css.awesomeClass}">
-        <div class="${css.alignCenter}">
-            {{__dependencies.slider1}}
-        </div>
-
-        {{__dependencies.slider2}}
-        {{__dependencies.slider3}}
-    </div>
-`;
+    actionExample             = require('./actions/actionExample');
 
 class TestComponent1 extends Component {
     // валидация опций
@@ -34,60 +14,63 @@ class TestComponent1 extends Component {
     constructor(options, context) {
         super(options, context);
 
-        // static dep
-        this.declareDependency(
+        // dep
+        this.declareDependencies(
             {
-                component: SomeDepComp,
-                alias:     'slider1',
+                component: ComponentText,
+                alias:     'Text',
                 options:   {
-                    id: options.id
+                    color: 'red'
                 }
             },
             {
-                component: SomeDepComp,
-                alias:     'slider2',
+                component: ComponentText,
+                alias:     'AnotherTextBlock',
                 options:   {
-                    name: options.name
+                    color: 'blue'
                 }
             }
         );
 
-        this.declareSource(
-            {
-                source:  SomeSource,
-                options: {
-                    id: context.req.id
-                }
-            },
-            {
-                source:  SomeSource2,
-                options: {
-                    id: options.id
-                }
+        // sources
+        this.declareSources({
+            source:  GetTextForSomethingSource,
+            options: {
+                id: '1'
+            }
+        });
+    }
+
+    /**
+     *
+     * @param   {Event}   event
+     */
+    coolHandler(event) {
+        this.callAction(
+
+            // link to the action
+            actionExample,
+
+            // actions params
+            {},
+
+            // action complete callback
+            (err, result) => {
+                this.setState({
+                    text: result.text
+                });
             }
         );
     }
 
+    /**
+     * @param {Error}                   err
+     * @param {GetTextForSomethingRes}  data
+     */
     onResponse(err, data) {
-        // error handler
-        // data handler
-
-        // dynamic dep
-        this.declareDependency(
-            {
-                component: SomeDepComp,
-                alias:     'slider3',
-                options:   {
-                    id: data.id
-                }
-            }
-        );
-
-        return data;
-    }
-
-    handler(event) {
-        // handler
+        this.setState({
+            text: data.text
+        });
     }
 }
 

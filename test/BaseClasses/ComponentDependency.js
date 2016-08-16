@@ -2,7 +2,7 @@
 
 var
     ComponentDependency = require('../../lib/BaseClasses/ComponentDependency'),
-    Component           = require('../../lib/BaseClasses/Component'),
+    Component           = require('../../lib/BaseClasses/Component/index'),
     Model               = require('../../lib/BaseClasses/Model'),
 
     properties          = [

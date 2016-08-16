@@ -2,7 +2,7 @@
 
 var
     BaseClass  = require('../../lib/BaseClasses/BaseClass'),
-    Component  = require('../../lib/BaseClasses/Component'),
+    Component  = require('../../lib/BaseClasses/Component/index'),
 
     methods    = [
         'disableCachingTemplates',
@@ -20,7 +20,7 @@ var
 
     properties = [
         'templatePath',
-        'templateСompiler',
+        'templateEngine',
         'partials',
         'clientTemplates',
         'data'
