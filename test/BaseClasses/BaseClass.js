@@ -4,12 +4,10 @@ var
     PropChecker = require('../../lib/PropChecker'),
     BaseClass   = require('../../lib/BaseClasses/BaseClass');
 
-describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
+describe('Testing "lib/BaseClasses/BaseClass"...', function() {
     describe('validate options', function() {
         it('should not throw error when options correct', function() {
             var
-                TestClass = class TestClass extends BaseClass {
-                },
                 testCases = [
                     {},
                     {
@@ -19,6 +17,8 @@ describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
                         age: 31
                     }
                 ];
+
+            class TestClass extends BaseClass {}
 
             TestClass.optionsValidation = {
                 foo: PropChecker.isString,
@@ -32,8 +32,6 @@ describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
 
         it('should throw error when options incorrect', function() {
             var
-                TestClass = class TestClass extends BaseClass {
-                },
                 testCases = [
                     {},
                     {
@@ -44,6 +42,8 @@ describe('Testing "lib/BaseClasses/Battlecruiser"...', function() {
                         age: 'bar'
                     }
                 ];
+
+            class TestClass extends BaseClass {}
 
             TestClass.optionsValidation = {
                 foo: [PropChecker.isRequired, PropChecker.isString],
