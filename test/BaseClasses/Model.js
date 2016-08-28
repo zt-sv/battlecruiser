@@ -76,6 +76,11 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
             fooInstance = new Foo(),
             barInstance = new Foo();
 
+        // console.log(fooInstance.__lookupGetter__('foo').__UUID);
+        // console.log(Object.getOwnPropertyDescriptor(fooInstance, 'foo').get.__UUID);
+        // console.log(fooInstance.foo);
+        // console.log(barInstance.__lookupGetter__('foo').__UUID);
+
         fooInstance.foo = 'first';
         barInstance.foo = 'second';
 
