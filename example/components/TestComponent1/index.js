@@ -3,9 +3,7 @@ var
     Component                 = BC.Component,
 
     ComponentText             = require('../ComponentText'),
-    GetTextForSomethingSource = require('../../sources/SomeSource'),
-
-    actionExample             = require('./actions/actionExample');
+    GetTextForSomethingSource = require('../../sources/SomeSource');
 
 class TestComponent1 extends Component {
     // валидация опций
@@ -38,38 +36,6 @@ class TestComponent1 extends Component {
             options: {
                 id: '1'
             }
-        });
-    }
-
-    /**
-     *
-     * @param   {Event}   event
-     */
-    coolHandler(event) {
-        this.callAction(
-
-            // link to the action
-            actionExample,
-
-            // actions params
-            {},
-
-            // action complete callback
-            (err, result) => {
-                this.setState({
-                    text: result.text
-                });
-            }
-        );
-    }
-
-    /**
-     * @param {Error}                   err
-     * @param {GetTextForSomethingRes}  data
-     */
-    onResponse(err, data) {
-        this.setState({
-            text: data.text
         });
     }
 }

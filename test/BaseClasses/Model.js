@@ -17,7 +17,26 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         expect(fooInstance).to.have.ownProperty('bar');
     });
 
-    it('should create model with props', function() {
+    it('should create empty model through inheritance', function() {
+        class Foo extends Model {}
+
+        Foo.attrs = {
+            foo: Model.isString,
+            bar: Model.isNumber
+        };
+
+        var
+            fooInstance = new Foo();
+
+        expect(fooInstance).to.have.ownProperty('foo');
+        expect(fooInstance).to.have.ownProperty('bar');
+    });
+
+    it('should create model with attributes', function() {
+        const
+            FOO_VALUE = '123',
+            BAR_VALUE = 123;
+
         var
             Foo = Model.create('Foo', {
                 foo: Model.isString,
@@ -25,12 +44,38 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
             }),
 
             fooInstance = new Foo({
-                foo: '123',
-                bar: 123
+                foo: FOO_VALUE,
+                bar: BAR_VALUE
             });
 
         expect(fooInstance).to.have.ownProperty('foo');
+        expect(fooInstance.foo).to.be.equal(FOO_VALUE);
         expect(fooInstance).to.have.ownProperty('bar');
+        expect(fooInstance.bar).to.be.equal(BAR_VALUE);
+    });
+
+    it('should create model with attributes through inheritance', function() {
+        class Foo extends Model {}
+
+        Foo.attrs = {
+            foo: Model.isString,
+            bar: Model.isNumber
+        };
+
+        const
+            FOO_VALUE = '123',
+            BAR_VALUE = 123;
+
+        var
+            fooInstance = new Foo({
+                foo: FOO_VALUE,
+                bar: BAR_VALUE
+            });
+
+        expect(fooInstance).to.have.ownProperty('foo');
+        expect(fooInstance.foo).to.be.equal(FOO_VALUE);
+        expect(fooInstance).to.have.ownProperty('bar');
+        expect(fooInstance.bar).to.be.equal(BAR_VALUE);
     });
 
     it('should throw error when property have no type', function() {
@@ -65,7 +110,6 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         })).to.throw(Error, 'Property "foo"');
     });
 
-
     it('should have isolation properties', function() {
         var
             Foo = Model.create('Foo', {
@@ -87,7 +131,22 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         expect(fooInstance.foo).to.not.equal(barInstance.foo);
     });
 
-    it('default properties', function() {
+    it('should be not extensible', function() {
+        var
+            Foo = Model.create('Foo', {
+                foo: Model.isString,
+                bar: Model.isNumber
+            }),
+
+            fooInstance = new Foo({
+                foo: '123',
+                bar: 123
+            });
+
+        expect(() => fooInstance.gggg = '123').to.throw(TypeError, 'object is not extensible');
+    });
+
+    it('should accept default properties', function() {
         var
             DEFAULT_VALUE = 'asd',
 
@@ -103,7 +162,28 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         expect(DEFAULT_VALUE).to.be.equal(fooInstance.foo);
     });
 
-    it('should to extend Model', function() {
+    it('should create model with default attributes through inheritance', function() {
+        const
+            DEFAULT_VALUE = 'asd';
+
+        class Foo extends Model {}
+
+        Foo.attrs = {
+            foo: Model.isString,
+            bar: Model.isNumber
+        };
+
+        Foo.defaultValues = {
+            foo: DEFAULT_VALUE
+        };
+
+        var
+            fooInstance = new Foo();
+
+        expect(DEFAULT_VALUE).to.be.equal(fooInstance.foo);
+    });
+
+    it('should to be instance of Model', function() {
         var
             Foo = Model.create('Foo', {
                 foo: Model.isString,
