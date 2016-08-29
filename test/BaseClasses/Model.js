@@ -139,25 +139,51 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         })).to.throw(Error, 'Property "foo"');
     });
 
+    it('should have validation for complex objects', function() {
+        var
+            Foo = Model.create('Foo', {
+                foo: Model.isString,
+                bar: Model.isNumber,
+                internalObj: {
+                    foo: Model.isString,
+                    bar: Model.isNumber
+                }
+            }),
+
+            fooInstance = new Foo();
+
+        expect(() => fooInstance.foo = 'asdf').to.not.throw();
+        expect(() => fooInstance.bar = 123).to.not.throw();
+        expect(() => fooInstance.foo = 123).to.throw(Error, 'Property "foo"');
+        expect(() => fooInstance.bar = 'asd').to.throw(Error, 'Property "bar"');
+
+        expect(() => fooInstance.internalObj = {}).to.throw();
+        expect(() => fooInstance.internalObj.foo = 'asdf').to.not.throw();
+        expect(() => fooInstance.internalObj.bar = 123).to.not.throw();
+        expect(() => fooInstance.internalObj.foo = 123).to.throw(Error, 'Property "foo"');
+        expect(() => fooInstance.internalObj.bar = 'asd').to.throw(Error, 'Property "bar"');
+    });
+
     it('should have isolation properties', function() {
         var
             Foo = Model.create('Foo', {
                 foo: Model.isString,
-                bar: Model.isNumber
+                bar: Model.isNumber,
+                internalObj: {
+                    foo: Model.isString,
+                    bar: Model.isNumber
+                }
             }),
 
             fooInstance = new Foo(),
             barInstance = new Foo();
 
-        // console.log(fooInstance.__lookupGetter__('foo').__UUID);
-        // console.log(Object.getOwnPropertyDescriptor(fooInstance, 'foo').get.__UUID);
-        // console.log(fooInstance.foo);
-        // console.log(barInstance.__lookupGetter__('foo').__UUID);
-
         fooInstance.foo = 'first';
+        fooInstance.internalObj.foo = 'first2';
         barInstance.foo = 'second';
 
         expect(fooInstance.foo).to.not.equal(barInstance.foo);
+        expect(fooInstance.foo).to.not.equal(fooInstance.internalObj.foo);
     });
 
     it('should be not extensible', function() {
