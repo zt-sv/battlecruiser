@@ -76,6 +76,35 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         expect(fooInstance.foo).to.be.equal(FOO_VALUE);
         expect(fooInstance).to.have.ownProperty('bar');
         expect(fooInstance.bar).to.be.equal(BAR_VALUE);
+
+        fooInstance.foo = '123123123123';
+        expect(fooInstance.foo).to.be.equal('123123123123');
+    });
+
+    it('should override default values', function() {
+        class Foo extends Model {}
+
+        Foo.attrs = {
+            foo: Model.isString,
+            bar: Model.isNumber
+        };
+
+        const
+            FOO_VALUE = '123',
+            BAR_VALUE = 123,
+            FOO_ANOTHER_VALUE = '456';
+
+        var
+            fooInstance = new Foo({
+                foo: FOO_VALUE,
+                bar: BAR_VALUE
+            });
+
+        expect(fooInstance).to.have.ownProperty('foo');
+        expect(fooInstance.foo).to.be.equal(FOO_VALUE);
+
+        fooInstance.foo = FOO_ANOTHER_VALUE;
+        expect(fooInstance.foo).to.be.equal(FOO_ANOTHER_VALUE);
     });
 
     it('should throw error when property have no type', function() {
