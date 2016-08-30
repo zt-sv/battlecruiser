@@ -18,3 +18,4 @@ script:
   - "npm run-script test-ci"
 after_script:
   - "npm install coveralls@2.10.0 && cat ./coverage/lcov.info | coveralls"
+  - "export CODACY_PROJECT_TOKEN=80d7ac0eac0442879274c2c4a013a7fb && npm install codacy-coverage && cat ./coverage/lcov.info | codacy-coverage"
