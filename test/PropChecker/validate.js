@@ -66,6 +66,18 @@ describe('Testing method "validate" in "lib/PropChecker"...', function() {
                             foo: [PropChecker.isString],
                             age: PropChecker.isRequired
                         }
+                    },
+                    {
+                        obj:  {},
+                        conf: {
+                            foo: ''
+                        }
+                    },
+                    {
+                        obj:  {},
+                        conf: {
+                            foo: ['']
+                        }
                     }
                 ];
 
