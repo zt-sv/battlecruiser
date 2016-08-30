@@ -146,7 +146,10 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
                 bar: Model.isNumber,
                 internalObj: {
                     foo: Model.isString,
-                    bar: Model.isNumber
+                    bar: Model.isNumber,
+                    deepObj: {
+                        anotherKey: Model.isBoolean
+                    }
                 }
             }),
 
@@ -157,7 +160,22 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
         expect(() => fooInstance.foo = 123).to.throw(Error, 'Property "foo"');
         expect(() => fooInstance.bar = 'asd').to.throw(Error, 'Property "bar"');
 
-        expect(() => fooInstance.internalObj = {}).to.throw();
+        expect(() => fooInstance.internalObj = {}).to.not.throw();
+        expect(() => fooInstance.internalObj = {
+            foo: 'asdf'
+        }).to.not.throw();
+        expect(() => fooInstance.internalObj = {
+            foo: 123123
+        }).to.throw();
+        expect(() => fooInstance.internalObj.deepObj = {
+            foo: 123123
+        }).to.throw(TypeError, 'object is not extensible');
+        expect(() => fooInstance.internalObj.deepObj = {
+            anotherKey: 123123
+        }).to.throw(Error, 'Property "anotherKey"');
+        expect(() => fooInstance.internalObj.deepObj = {
+            anotherKey: false
+        }).to.not.throw();
         expect(() => fooInstance.internalObj.foo = 'asdf').to.not.throw();
         expect(() => fooInstance.internalObj.bar = 123).to.not.throw();
         expect(() => fooInstance.internalObj.foo = 123).to.throw(Error, 'Property "foo"');
