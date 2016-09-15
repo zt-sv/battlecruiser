@@ -1,9 +1,10 @@
-var
-    BC        = require('../../../index'),
-    PropChecker = BC.PropChecker,
-    Component = BC.Component;
+'use strict';
 
-class TextComponent extends Component {
+var
+    BC          = require('../../../index'),
+    PropChecker = BC.PropChecker;
+
+class TextComponent extends BC.Component {
     // валидация опций
 
     // конструктор

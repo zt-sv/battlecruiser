@@ -1,3 +1,5 @@
+'use strict';
+
 var
     BC          = require('../../index'),
     Controller   = BC.Controller,
@@ -15,7 +17,8 @@ class MainPageRouteCtrl extends Controller {
                 options: {}
             },
             (err, html) => {
-
+                console.log(err);
+                console.log(html)
             }
         );
 

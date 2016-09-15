@@ -17,5 +17,5 @@ BC.initialize({
     // After initialization, handle some route
 
     // req, res, next
-    mainPageCtrl({}, {}, () => {});
+    // mainPageCtrl({}, {}, () => {});
 });

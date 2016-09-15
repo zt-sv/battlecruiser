@@ -1,3 +1,5 @@
+'use strict';
+
 var
     BC                        = require('../../../index'),
     Component                 = BC.Component,
@@ -15,14 +17,14 @@ class TestComponent1 extends Component {
         // dep
         this.declareDependencies(
             {
-                component: ComponentText,
+                component: 'ComponentText',
                 alias:     'Text',
                 options:   {
                     color: 'red'
                 }
             },
             {
-                component: ComponentText,
+                component: 'ComponentText',
                 alias:     'AnotherTextBlock',
                 options:   {
                     color: 'blue'
