@@ -206,7 +206,10 @@ describe('Testing "lib/BaseClasses/Model"...', function() {
             expect(() => fooInstance.bar = 'asd').to.throw(Error, 'Property "bar"');
 
             expect(() => fooInstance.internalObj = {}).to.not.throw();
-            expect(() => fooInstance.internalObj = '123').to.throw(Error, 'Property "internalObj" must be Object, but got');
+            expect(() => fooInstance.internalObj = '123').to.throw(
+                Error,
+                'Property "internalObj" must be Object, but got'
+            );
             expect(() => fooInstance.internalObj = {
                 foo: 'asdf'
             }).to.not.throw();

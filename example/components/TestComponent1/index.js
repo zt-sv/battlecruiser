@@ -1,13 +1,10 @@
 'use strict';
 
 var
-    BC                        = require('../../../index'),
-    Component                 = BC.Component,
+    BC            = require('../../../index'),
+    ComponentText = require('../ComponentText');
 
-    ComponentText             = require('../ComponentText'),
-    GetTextForSomethingSource = require('../../sources/SomeSource');
-
-class TestComponent1 extends Component {
+class TestComponent1 extends BC.Component {
     // валидация опций
 
     // конструктор
@@ -34,7 +31,7 @@ class TestComponent1 extends Component {
 
         // sources
         this.declareSources({
-            source:  GetTextForSomethingSource,
+            source:  'SomeSource',
             options: {
                 id: '1'
             }

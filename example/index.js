@@ -5,6 +5,18 @@ var
     BC           = require('../index'),
     mainPageCtrl = require('./controller/mainPageRouteCtrl');
 
+const
+    req = {
+        headers: {
+            accept: ''
+        }
+    },
+
+    res = {
+        send: () => res,
+        json: () => res
+    };
+
 BC.initialize({
     componentsRoot: [
         {
@@ -17,5 +29,5 @@ BC.initialize({
     // After initialization, handle some route
 
     // req, res, next
-    // mainPageCtrl({}, {}, () => {});
+    mainPageCtrl(req, res, () => {});
 });

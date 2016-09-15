@@ -2,27 +2,23 @@
 
 var
     BC          = require('../../index'),
-    Controller   = BC.Controller,
-
-    TestComponent1 = require('../components/TestComponent1');
+    Controller   = BC.Controller;
 
 class MainPageRouteCtrl extends Controller {
-    // конструктор
+
     constructor(req, res, next) {
         super(req, res, next);
 
-        BC.render(
+        this.componentResolver.resolve(
             {
-                component: TestComponent1,
+                component: 'TestComponent1',
                 options: {}
             },
             (err, html) => {
                 console.log(err);
-                console.log(html)
+                console.log(html);
             }
         );
-
-        this.componentResolver.resolve();
     }
 }
 
